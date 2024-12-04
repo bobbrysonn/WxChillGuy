@@ -1,26 +1,47 @@
-#include <wx/wx.h>
+#include "main.h"
 
-class MyApp : public wxApp {
-public:
-    virtual bool OnInit();
-};
-
-class MyFrame : public wxFrame {
-public:
-    MyFrame();
-};
-
-MyFrame::MyFrame() 
-    : wxFrame(NULL, wxID_ANY, "Hello World", wxDefaultPosition, wxSize(450, 350)) {
-    // Optional: Add some content to the frame
-    wxStaticText* text = new wxStaticText(this, wxID_ANY, "Hello, wxWidgets!", 
-                                          wxPoint(10, 10), wxDefaultSize);
-}
-
-bool MyApp::OnInit() {
-    MyFrame* frame = new MyFrame();
+bool WxChillGuyApp::OnInit()
+{
+    WxChillGuyFrame* frame = new WxChillGuyFrame(wxT("Chill Guy"), wxSize(800, 600));
+    
     frame->Show(true);
+
     return true;
 }
 
-wxIMPLEMENT_APP(MyApp);
+WxChillGuyFrame::WxChillGuyFrame(const wxString& title, const wxSize& size) : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, size)
+{
+    // Create an exit menu item
+    wxMenu* menuFile = new wxMenu;
+    menuFile->Append(wxID_EXIT, wxT("E&xit\tAlt-D"), wxT("Quit being a chill guy"));
+    // Create a help menu item
+    wxMenu* menuHelp = new wxMenu;
+    menuHelp->Append(wxID_ABOUT, wxT("&About\tF1"), wxT("Much chill"));
+
+    // Create a menu bar
+    wxMenuBar* menuBar = new wxMenuBar;
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(menuHelp, wxT("&Help"));
+    // Set the menu bar
+    SetMenuBar(menuBar);
+
+    // Create a status bar
+    CreateStatusBar();
+
+    // Bind the menu items to their respective functions
+    Bind(wxEVT_MENU, &WxChillGuyFrame::OnAbout, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &WxChillGuyFrame::OnExit, this, wxID_EXIT);
+}
+
+void WxChillGuyFrame::OnAbout(wxCommandEvent& event)
+{
+    wxMessageBox(wxT("This is a chill guy!"), wxT("About"), wxOK | wxICON_INFORMATION, this);
+}
+
+void WxChillGuyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+{
+    Close(true);
+}
+
+// Implement app
+wxIMPLEMENT_APP(WxChillGuyApp);

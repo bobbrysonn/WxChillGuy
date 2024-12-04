@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(WxChillGuy)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 find_package(wxWidgets REQUIRED)
 
 add_executable(${PROJECT_NAME} WIN32 src/main.cpp)

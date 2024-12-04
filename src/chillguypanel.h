@@ -1,4 +1,5 @@
 #include <wx/wx.h>
+#include <wx/dcbuffer.h>
 
 class ChillGuyPanel : public wxPanel
 {

@@ -30,17 +30,7 @@ WxChillGuyFrame::WxChillGuyFrame(const wxString& title, const wxSize& size) : wx
     CreateStatusBar();
 
     wxImage::AddHandler(new wxPNGHandler);
-    wxImage image(wxGetCwd() + "\\ChillGuy.png", wxBITMAP_TYPE_PNG);
-    if (!image.IsOk())
-    {
-        wxMessageBox(wxT("Could not load image!"), wxT("Error"), wxOK | wxICON_ERROR, this);
-    }
-    else
-    {
-        wxBitmap bitmap(image);
-        wxStaticBitmap* staticBitmap = new wxStaticBitmap(this, wxID_ANY, bitmap);
-    }
-
+    ChillGuyPanel* panel = new ChillGuyPanel(this);
 
     // Bind the menu items to their respective functions
     Bind(wxEVT_MENU, &WxChillGuyFrame::OnAbout, this, wxID_ABOUT);

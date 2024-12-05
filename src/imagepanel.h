@@ -5,7 +5,8 @@
 
 class wxImagePanel : public wxPanel 
 {
-    bool isDragging = false;
+    bool isDragging = false, isResizing = false;
+    int imgX = 0, imgY = 0;
     int imgHeight = 200, imgWidth = 200;
     wxImage image;
     wxPoint dragStartPoint;

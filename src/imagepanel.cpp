@@ -65,8 +65,22 @@ void wxImagePanel::onMouseMove(wxMouseEvent &event)
 
 void wxImagePanel::onPaint(wxPaintEvent& event)
 {
+    // Get root window size
+    int width, height;
+    GetParent()->GetClientSize(&width, &height);
+
     wxAutoBufferedPaintDC dc(this);
-    render(dc);
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.Clear();
+    dc.SetClippingRegion((width - this->width) / 2, (height - this->height) / 2, this->width, this->height);
+
+    wxGraphicsContext* gc = wxGraphicsContext::Create(dc);
+
+    if (gc) {
+        render(*gc);  // Pass the wxGraphicsContext to the render function
+
+        delete gc;  // Clean up graphics context
+    }
 }
 
 void wxImagePanel::onSize(wxSizeEvent &event)
@@ -76,8 +90,8 @@ void wxImagePanel::onSize(wxSizeEvent &event)
     GetParent()->GetClientSize(&width, &height);
 
     // Calculate the new image position
-    imgX = imgX + (width - prevWindowWidth)/2;
-    imgY = imgY + (height - prevWindowHeight)/2;
+    imgX = imgX + (width - prevWindowWidth) / 2;
+    imgY = imgY + (height - prevWindowHeight) / 2;
 
     // Set the new window size
     prevWindowWidth = width;
@@ -86,22 +100,33 @@ void wxImagePanel::onSize(wxSizeEvent &event)
     Refresh();
 }
 
-void wxImagePanel::render(wxDC& dc)
+void wxImagePanel::render(wxGraphicsContext& gc)
 {
     // Get root window size
     int width, height;
     GetParent()->GetClientSize(&width, &height);
 
-    dc.Clear();
-    dc.SetClippingRegion((width - this->width) / 2, (height - this->height) / 2, this->width, this->height);
+    // Clear the background
+    gc.SetBrush(*wxWHITE_BRUSH); // Set background color (white)
+    gc.SetPen(*wxTRANSPARENT_PEN); // No border for background
+    gc.DrawRectangle(0, 0, width, height); // Fill with the background
 
+    // Optional: Draw a rounded rectangle
+    double cornerRadius = 20.0; // Example corner radius
+    gc.SetBrush(wxBrush(wxColor(141, 146, 123, 255))); // Red fill for the rectangle
+    gc.SetPen(wxPen(*wxWHITE_PEN)); // Black border for the rectangle
+    gc.DrawRoundedRectangle((width - this->width) / 2, (height - this->height) / 2, this->width, this->height, cornerRadius);
+
+    // Rescale the image
     wxImage img = image;
     img.Rescale(imgWidth, imgHeight);
 
     wxBitmap bitmap(img);
-   
-    dc.DrawBitmap(bitmap, imgX, imgY);
+
+    // Draw the image
+    gc.DrawBitmap(bitmap, imgX, imgY, imgWidth, imgHeight);
 }
+
 
 BEGIN_EVENT_TABLE(wxImagePanel, wxPanel)
     EVT_LEFT_DOWN(wxImagePanel::onMouseDown)

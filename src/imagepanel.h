@@ -2,6 +2,7 @@
 
 #include <wx/wx.h>
 #include <wx/dcbuffer.h>
+#include <wx/graphics.h>
 
 class wxImagePanel : public wxPanel 
 {
@@ -20,7 +21,7 @@ public:
     void onMouseMove(wxMouseEvent& event);
     void onPaint(wxPaintEvent& event);
     void onSize(wxSizeEvent& event);
-    void render(wxDC& dc);
+    void render(wxGraphicsContext& gc);
 
     DECLARE_EVENT_TABLE()
 };

@@ -1,16 +1,20 @@
 #include "main.h"
-#include "chillguypanel.h"
 
 bool WxChillGuyApp::OnInit()
 {
-    WxChillGuyFrame* frame = new WxChillGuyFrame(wxT("Chill Guy"), wxSize(800, 600));
-    
+    // Else image won't load
+    wxInitAllImageHandlers();
+
+    frame = new wxChillGuyFrame(wxT("Chill Guy"), wxSize(800, 600));
+    panel = new wxImagePanel(frame, "ChillGuy.png", wxBITMAP_TYPE_PNG);
+    panel->SetSize(200, 200);
+
     frame->Show(true);
 
     return true;
 }
 
-WxChillGuyFrame::WxChillGuyFrame(const wxString& title, const wxSize& size) : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, size)
+wxChillGuyFrame::wxChillGuyFrame(const wxString& title, const wxSize& size) : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, size)
 {
     // Create an exit menu item
     wxMenu* menuFile = new wxMenu;
@@ -29,20 +33,17 @@ WxChillGuyFrame::WxChillGuyFrame(const wxString& title, const wxSize& size) : wx
     // Create a status bar
     CreateStatusBar();
 
-    wxImage::AddHandler(new wxPNGHandler);
-    ChillGuyPanel* panel = new ChillGuyPanel(this);
-
     // Bind the menu items to their respective functions
-    Bind(wxEVT_MENU, &WxChillGuyFrame::OnAbout, this, wxID_ABOUT);
-    Bind(wxEVT_MENU, &WxChillGuyFrame::OnExit, this, wxID_EXIT);
+    Bind(wxEVT_MENU, &wxChillGuyFrame::OnAbout, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &wxChillGuyFrame::OnExit, this, wxID_EXIT);
 }
 
-void WxChillGuyFrame::OnAbout(wxCommandEvent& event)
+void wxChillGuyFrame::OnAbout(wxCommandEvent& event)
 {
     wxMessageBox(wxT("This is a chill guy!"), wxT("About"), wxOK | wxICON_INFORMATION, this);
 }
 
-void WxChillGuyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+void wxChillGuyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close(true);
 }

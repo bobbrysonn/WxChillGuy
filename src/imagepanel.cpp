@@ -4,6 +4,8 @@ wxImagePanel::wxImagePanel(wxFrame* parent, wxString file, wxBitmapType format) 
 {
     image.LoadFile(file, format);
     dragStartPoint = wxDefaultPosition;
+
+    SetBackgroundStyle(wxBG_STYLE_PAINT);
 }
 
 void wxImagePanel::onMouseUp(wxMouseEvent &event)

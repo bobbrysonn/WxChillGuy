@@ -5,7 +5,11 @@ wxImagePanel::wxImagePanel(wxFrame* parent, wxString file, wxBitmapType format) 
     image.LoadFile(file, format);
     dragStartPoint = wxDefaultPosition;
 
+    // Set background style to paint
     SetBackgroundStyle(wxBG_STYLE_PAINT);
+
+    // Set previous window size
+    GetParent()->GetClientSize(&prevWindowWidth, &prevWindowHeight);
 }
 
 void wxImagePanel::onMouseUp(wxMouseEvent &event)
@@ -65,9 +69,31 @@ void wxImagePanel::onPaint(wxPaintEvent& event)
     render(dc);
 }
 
+void wxImagePanel::onSize(wxSizeEvent &event)
+{
+    // Get root window size
+    int width, height;
+    GetParent()->GetClientSize(&width, &height);
+
+    // Calculate the new image position
+    imgX = imgX + (width - prevWindowWidth)/2;
+    imgY = imgY + (height - prevWindowHeight)/2;
+
+    // Set the new window size
+    prevWindowWidth = width;
+    prevWindowHeight = height;
+
+    Refresh();
+}
+
 void wxImagePanel::render(wxDC& dc)
 {
+    // Get root window size
+    int width, height;
+    GetParent()->GetClientSize(&width, &height);
+
     dc.Clear();
+    dc.SetClippingRegion((width - this->width) / 2, (height - this->height) / 2, this->width, this->height);
 
     wxImage img = image;
     img.Rescale(imgWidth, imgHeight);
@@ -82,4 +108,5 @@ BEGIN_EVENT_TABLE(wxImagePanel, wxPanel)
     EVT_LEFT_UP(wxImagePanel::onMouseUp)
     EVT_MOTION(wxImagePanel::onMouseMove)
     EVT_PAINT(wxImagePanel::onPaint)
+    EVT_SIZE(wxImagePanel::onSize)
 END_EVENT_TABLE()

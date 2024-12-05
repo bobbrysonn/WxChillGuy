@@ -6,8 +6,10 @@
 class wxImagePanel : public wxPanel 
 {
     bool isDragging = false, isResizing = false;
-    int imgX = 0, imgY = 0;
+    int imgX = 100, imgY = 100;
     int imgHeight = 200, imgWidth = 200;
+    int height = 600, width = 600, orginX, orginY;
+    int prevWindowWidth, prevWindowHeight;
     wxImage image;
     wxPoint dragStartPoint;
 
@@ -17,6 +19,7 @@ public:
     void onMouseDown(wxMouseEvent& event);
     void onMouseMove(wxMouseEvent& event);
     void onPaint(wxPaintEvent& event);
+    void onSize(wxSizeEvent& event);
     void render(wxDC& dc);
 
     DECLARE_EVENT_TABLE()

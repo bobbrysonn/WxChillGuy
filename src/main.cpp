@@ -5,7 +5,9 @@ bool WxChillGuyApp::OnInit()
     // Else image won't load
     wxInitAllImageHandlers();
 
-    frame = new wxChillGuyFrame(wxT("Chill Guy"), wxSize(800, 600));
+    frame = new wxChillGuyFrame(wxT("Chill Guy"), wxSize(800, 800));
+    frame->SetMinSize(wxSize(800, 800));
+    
     panel = new wxImagePanel(frame, "ChillGuy.png", wxBITMAP_TYPE_PNG);
     panel->SetSize(200, 200);
 
@@ -32,6 +34,7 @@ wxChillGuyFrame::wxChillGuyFrame(const wxString& title, const wxSize& size) : wx
 
     // Create a status bar
     CreateStatusBar();
+    SetStatusText(wxT("Chilling"));
 
     // Bind the menu items to their respective functions
     Bind(wxEVT_MENU, &wxChillGuyFrame::OnAbout, this, wxID_ABOUT);
